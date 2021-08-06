@@ -2,6 +2,9 @@
 /*#include "Graphics/ParticleSystem.h"
 #include "AudioSystem.h"*/
 
+//input
+#include "Input/InputSystem.h"
+
 //core
 #include "Core/FileSystem.h"
 
