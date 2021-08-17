@@ -1,18 +1,18 @@
 #pragma once
 #include "Object.h"
 #include "Math/Transform.h"
+#include "Component/Component.h"
 #include <vector>
 #include <memory>
 
 namespace nc {
 	class Scene;
-	class Texture;
 	class Renderer;
 
 	class Actor : public Object {
 	public:
 		Actor() {}
-		Actor(const Transform transform, std::shared_ptr<Texture> texture = {}) : transform{ transform }, texture{ texture } {};
+		Actor(const Transform transform) : transform{ transform }{};
 
 		virtual void Initialize() {}
 
@@ -24,18 +24,19 @@ namespace nc {
 
 		float GetRadius();
 
+		void AddComponent(std::unique_ptr<Component> component);
 
 	public:
 		bool destroy = false;
 		std::string tag;
-
-		std::shared_ptr <Texture> texture;
 
 		Transform transform;
 		Scene* scene = nullptr;
 
 		Actor* parent{ nullptr };
 		std::vector<std::unique_ptr<Actor>> children;
+
+		std::vector<std::unique_ptr<Component>> components;
 	};
 
 }

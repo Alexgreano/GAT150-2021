@@ -147,12 +147,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Actor\Asteroid.cpp" />
-    <ClCompile Include="Actor\Enemy.cpp" />
-    <ClCompile Include="Actor\Kamikazi.cpp" />
-    <ClCompile Include="Actor\Player.cpp" />
-    <ClCompile Include="Actor\PowerUp.cpp" />
-    <ClCompile Include="Actor\Projectile.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
@@ -162,12 +156,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Actor\Asteroid.h" />
-    <ClInclude Include="Actor\Enemy.h" />
-    <ClInclude Include="Actor\Kamikazi.h" />
-    <ClInclude Include="Actor\Player.h" />
-    <ClInclude Include="Actor\PowerUp.h" />
-    <ClInclude Include="Actor\Projectile.h" />
     <ClInclude Include="Game.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

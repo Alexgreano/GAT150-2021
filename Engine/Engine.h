@@ -31,6 +31,10 @@
 #include <memory>
 #include <algorithm>
 
+//component
+#include "Component/SpriteComponent.h"
+#include "Component/PhysicsComponent.h"
+
 #define NOMINMAX
 //#include "core.h"
 

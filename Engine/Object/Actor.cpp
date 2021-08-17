@@ -1,12 +1,12 @@
 #include "Actor.h"
 #include "Graphics/Renderer.h"
+#include "Component/GraphicsComponent .h"
 #include <algorithm>
 
 namespace nc {
 	void nc::Actor::Update(float dt)
 	{
-		/*transform.rotation += 180.0f * dt;*/
-		//transform.position.x += 100.0f * dt ;
+		std::for_each(components.begin(), components.end(), [](auto& component) {component->Update(); });
 
 		transform.Update();
 		std::for_each(children.begin(), children.end(), [](auto& child) {child->transform.Update(child->parent->transform.matrix); });
@@ -15,14 +15,12 @@ namespace nc {
 	void nc::Actor::Draw(Renderer* renderer)
 	{
 		//renderer->Draw(texture, transform);
-		if (texture)
-		{
-			renderer->Draw(texture, transform);
-		}
-		else
-		{
-			//std::cout << "no texture" << std::endl;
-		}
+		std::for_each(components.begin(), components.end(), [renderer](auto& component) {
+			if (dynamic_cast<GraphicsComponent*>(component.get())) {
+				dynamic_cast<GraphicsComponent*>(component.get())->Draw(renderer);
+			}
+			});
+		
 		std::for_each(children.begin(), children.end(), [renderer](auto& child) { child->Draw(renderer); });
 	}
 
@@ -34,7 +32,13 @@ namespace nc {
 
 	float Actor::GetRadius()
 	{
-		return (texture) ? texture->GetSize().Length() * 0.5f * transform.scale.x : 0;
+		return 0;
+	}
+
+	void Actor::AddComponent(std::unique_ptr<Component> component)
+	{
+		component->owner = this;
+		components.push_back(std::move(component));
 	}
 
 
