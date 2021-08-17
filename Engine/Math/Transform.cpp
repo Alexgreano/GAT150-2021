@@ -1,10 +1,12 @@
 #include "Transform.h"
 
-namespace nc {
-	void Transform::Update(){
+namespace nc 
+{
+	void Transform::Update()
+	{
 		Matrix33 mxs;
 		mxs.Scale(scale);
-		
+
 		Matrix33 mxr;
 		mxr.Rotate(rotation);
 
@@ -12,6 +14,7 @@ namespace nc {
 		mxt.Translate(position);
 
 		matrix = mxs * mxr * mxt;
+
 	}
 	void Transform::Update(const Matrix33& mx)
 	{
@@ -29,6 +32,5 @@ namespace nc {
 		position = matrix.GetTranslate();
 		rotation = matrix.GetRotation();
 		scale = matrix.GetScale();
-
 	}
 }

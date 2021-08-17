@@ -1,5 +1,7 @@
 #include "InputSystem.h"
 #include <SDL_keyboard.h>
+#include <SDL.h>
+#include <array>
 #include <algorithm>
 
 namespace nc {
@@ -21,25 +23,40 @@ namespace nc {
 
 		return state;
 	}
-	bool InputSystem::IsKeyDown(int id)
+	InputSystem::eKeyState InputSystem::GetButtonState(int id)
+	{
+		eKeyState state = eKeyState::Idle;
+
+		bool keyDown = isButtonDown(id);
+		bool prevKeyDown = isPrevButtonDown(id);
+
+		if (keyDown)
+		{
+			state = (prevKeyDown) ? eKeyState::Held : eKeyState::Pressed;
+		}
+		else
+		{
+			state = (prevKeyDown) ? eKeyState::Release : eKeyState::Idle;
+		}
+
+		return state;
+	}
+	/*bool InputSystem::IsKeyDown(int id)
 	{
 		return keyboardState[id];
 	}
 	bool InputSystem::IsPreviousKeyDown(int id)
 	{
 		return prevKeyboardState[id];
-	}
+	}*/
 	void InputSystem::Startup()
 	{
 		// get pointer to sdl keyboard states
 		const Uint8* keyboardStateSDL = SDL_GetKeyboardState(&numKeys);
-
 		// resize of keyboard state using numKeys for size
 		keyboardState.resize(numKeys);
-
 		// copy sdl keyboard state to keyboard state vector
 		std::copy(keyboardStateSDL, keyboardStateSDL + numKeys, keyboardState.begin());
-
 		// set previous keyboard state to keyboard state
 		prevKeyboardState = keyboardState;
 
@@ -55,5 +72,14 @@ namespace nc {
 		const Uint8* keyboardStateSDL = SDL_GetKeyboardState(nullptr);
 		std::copy(keyboardStateSDL, keyboardStateSDL + numKeys, keyboardState.begin());
 
+		prevMouseButtonState = mouseButtonState;
+		int x, y;
+		Uint32 buttons = SDL_GetMouseState(&x, &y);
+		mousePosition = nc::Vector2{ x,y };
+		mouseButtonState[0] = buttons & SDL_BUTTON_LMASK; //button [0000]
+		mouseButtonState[1] = buttons & SDL_BUTTON_MMASK; //button [0000]
+		mouseButtonState[2] = buttons & SDL_BUTTON_RMASK; //button [0000]
+
+		mousePosition = nc::Vector2{ x,y };
 	}
 }

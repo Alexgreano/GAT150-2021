@@ -1,23 +1,27 @@
 #pragma once
-/*#include "Graphics/ParticleSystem.h"
-#include "AudioSystem.h"*/
+//#include "Graphics/ParticleSystem.h"
+#include "Audio/AudioSystem.h"
 
 //input
 #include "Input/InputSystem.h"
 
 //core
+#include "Core/Utilities.h"
 #include "Core/FileSystem.h"
+#include "Core/Timer.h"
 
 //math
 #include "Math/Vector2.h"
 #include "Math/Color.h"
 #include "Math/Random.h"
-#include "Math/MathUtils.h"
+#include "Math/MathUtilis.h"
 #include "Math/Transform.h"
 
 //graphics
 #include "Graphics/Renderer.h"
 #include "Graphics/Texture.h"
+#include "Graphics/ParticleSystem.h"
+
 
 //objects
 #include "Object/Actor.h"
@@ -40,11 +44,14 @@ namespace nc {
 		void Startup();
 		void Shutdown();
 
-		void Update(float dt);
-		void Draw();
+		void Update();
+		void Draw(Renderer* renderer);
 
 		template<typename T>
 		T* Get();
+
+	public:
+		FrameTimer time;
 
 	private:
 		std::vector<std::unique_ptr<System>> systems;

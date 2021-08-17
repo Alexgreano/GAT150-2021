@@ -51,7 +51,7 @@ namespace nc {
 	}
 
 	void Scene::RemoveActor(Actor* actor) {
-
+		
 	}
 
 	void Scene::RemoveAllActors() {

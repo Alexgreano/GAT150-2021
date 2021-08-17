@@ -3,6 +3,7 @@
 #include "Texture.h"
 #include "Math/Vector2.h"
 #include "Math/Transform.h"
+#include "Math/MathUtilis.h"
 #include <SDL.h>
 #include <string>
 

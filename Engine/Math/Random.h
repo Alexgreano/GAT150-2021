@@ -1,12 +1,16 @@
 #pragma once
 
 
-namespace nc {
-	void SeedRandom(unsigned int seed);
+namespace nc
+{
 
-	float Random(); // 0-1
-	float RandomRange(float min, float max);
+	 void SeedRandom(unsigned int seed);
+	 float Random();
+	 float RandomRange(float min, float max);
 
-	int RandomInt();
-	int RandomRangeInt(int min, int max);
+	 int RandomInt();
+	 int RandomInt(int max);
+	 int RandomRandInt(int min, int max);
+	 
+
 }
