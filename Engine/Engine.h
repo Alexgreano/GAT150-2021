@@ -34,6 +34,7 @@
 //component
 #include "Component/SpriteComponent.h"
 #include "Component/PhysicsComponent.h"
+#include "Component/SpriteAnimationComponent.h"
 
 #define NOMINMAX
 //#include "core.h"
