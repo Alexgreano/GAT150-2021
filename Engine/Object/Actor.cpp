@@ -1,6 +1,7 @@
 #include "Actor.h"
 #include "Graphics/Renderer.h"
 #include "Component/GraphicsComponent .h"
+#include "Engine.h"
 #include <algorithm>
 
 namespace nc {
@@ -33,6 +34,45 @@ namespace nc {
 	float Actor::GetRadius()
 	{
 		return 0;
+	}
+
+	void Actor::AddComponent(std::unique_ptr<Component> component)
+	{
+		component->owner = this;
+		components.push_back(std::move(component));
+	}
+
+	bool Actor::Write(const rapidjson::Value& value) const
+	{
+		return false;
+	}
+
+	bool Actor::Read(const rapidjson::Value& value)
+	{
+		JSON_READ(value, tag);
+		JSON_READ(value, name);
+		if (value.HasMember("transform")) {
+			transform.Read(value["transform"]);
+		}
+
+		if (value.HasMember("components") && value["components"].IsArray()) {
+			for (auto& componentValue : value["components"].GetArray()) {
+				std::string type;
+				JSON_READ(componentValue, type);
+
+				auto component = ObjectFactory::Instance().Create<Component>(type);
+				if (component) {
+					component->owner = this;
+					component->Read(componentValue);
+
+					AddComponent(std::move(component));
+
+				}
+			}
+		}
+
+		return true;
+		
 	}
 
 

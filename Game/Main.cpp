@@ -6,23 +6,16 @@
 //#include <cassert>
 #include "Game.h"
 #include <Graphics/Font.h>
+#include "Core/Json.h"
 
-//#define MSG(message) std::cout << #message << std::endl;
 
 int main(int, char**)
 {
-	//int i = 6;
-	//assert(i == 6);
-
-	////std::cout << __func__ << std::endl;
-	//MSG("alayna is dumb");
-
 	Game game;
 	game.Initialize();
 
 	bool quit = false;
 	SDL_Event event;
-
 
 	while (!quit && !game.IsQuit())
 	{

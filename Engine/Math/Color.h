@@ -9,6 +9,9 @@ namespace nc
     {
         float r, g, b;
 
+        float operator [] (size_t index) const { return (&r)[index]; }
+        float& operator [] (size_t index) { return (&r)[index]; }
+
         Color() : r(0), g(0), b(0) {}
         Color(float r, float g, float b) : r(r), g(g), b(b) {}
         Color(std::uint32_t  rgb) // DWORD(x | b | g | r )
@@ -48,6 +51,7 @@ namespace nc
 
 
         friend std::istream& operator >> (std::istream& stream, Color& c);
+        friend std::ostream& operator << (std::ostream& stream, Color& c);
 
         static const Color white;
         static const Color red;

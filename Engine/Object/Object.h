@@ -2,6 +2,7 @@
 
 namespace nc {
 	class Object {
-
+	public:
+		virtual ~Object() {}
 	};
 }

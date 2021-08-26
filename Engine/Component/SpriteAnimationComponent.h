@@ -3,10 +3,14 @@
 #include <SDL.h>
 
 namespace nc {
-	class SpriteAnimationComponent : public SpriteCompnent {
+	class SpriteAnimationComponent : public SpriteComponent {
 	public:
 		void Update() override;
 		void Draw(Renderer* renderer) override;
+
+		// Inherited via ISerializable
+		virtual bool Write(const rapidjson::Value& value) const override;
+		virtual bool Read(const rapidjson::Value& value) override;
 	public:
 		int frame { 0 };
 		int fps { 0 };
@@ -15,6 +19,9 @@ namespace nc {
 		
 		float frameTimer{ 0 };
 		float frameTime{ 0 };
+
+		float startFrame{ 0 };
+		float endFrame{ 0 };
 
 		SDL_Rect rect;
 	};

@@ -1,14 +1,24 @@
 #pragma once
+
+#define REGISTER_CLASS(class) nc::ObjectFactory::Instance().Register<class>(#class);
+
 //#include "Graphics/ParticleSystem.h"
 #include "Audio/AudioSystem.h"
 
 //input
 #include "Input/InputSystem.h"
 
+//framework
+#include "Framework/EventSystem.h"
+#include "Resource/ResourceSystem.h"
+#include "Framework/Singleton.h"
+#include "Framework/Factory.h"
+
 //core
 #include "Core/Utilities.h"
 #include "Core/FileSystem.h"
 #include "Core/Timer.h"
+#include "Core/Serializable.h"
 
 //math
 #include "Math/Vector2.h"
@@ -22,6 +32,8 @@
 #include "Graphics/Texture.h"
 #include "Graphics/ParticleSystem.h"
 
+//physics
+#include "Physics/PhysicsSystem.h"
 
 //objects
 #include "Object/Actor.h"
@@ -35,15 +47,15 @@
 #include "Component/SpriteComponent.h"
 #include "Component/PhysicsComponent.h"
 #include "Component/SpriteAnimationComponent.h"
+#include "Component/RBPhysicsComponent.h"
 
 #define NOMINMAX
 //#include "core.h"
 
-//framework
-#include "Framework/EventSystem.h"
-#include "Resource/ResourceSystem.h"
 
 namespace nc {
+	using ObjectFactory = Singleton<Factory<std::string, Object>>;
+
 	class Engine {
 	public:
 		void Startup();

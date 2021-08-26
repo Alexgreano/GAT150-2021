@@ -1,6 +1,7 @@
 #pragma once
 #include "Framework/System.h"
 #include "Resource.h"
+#include "Core/Utilities.h"
 #include <string>
 #include <map>
 #include <memory>
@@ -31,7 +32,7 @@ namespace nc {
 		}
 		else {
 			std::shared_ptr resource = std::make_shared<T>(); //new shape
-			std::cout << string_tolower(name) << " " << resource->Load(string_tolower(name), data) << std::endl;
+			resource->Load(name, data);
 			resources[string_tolower(name)] = resource;
 			
 			return resource;

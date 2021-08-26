@@ -1,5 +1,5 @@
 #include "Scene.h"
-#include "Actor.h"
+#include "Engine.h"
 #include <algorithm>
 
 namespace nc {
@@ -57,6 +57,42 @@ namespace nc {
 	void Scene::RemoveAllActors() {
 		actors.clear();
 
+	}
+
+	Actor* Scene::FindActor(const std::string& name)
+	{
+		for (auto& actor : actors) {
+			if (actor->name == name) return actor.get();
+		}
+
+		return nullptr;
+	}
+
+	bool Scene::Write(const rapidjson::Value& value) const
+	{
+		return false;
+	}
+
+	bool Scene::Read(const rapidjson::Value& value)
+	{
+		if (value.HasMember("actors") && value["actors"].IsArray()) {
+			for (auto& actorValue : value["actors"].GetArray()) {
+				std::string type;
+				JSON_READ(actorValue, type);
+
+				auto actor = ObjectFactory::Instance().Create<Actor>(type);
+				if (actor) {
+					actor->scene = this;
+					actor->Read(actorValue);
+
+					AddActor(std::move(actor));
+
+				}
+			}
+		}
+
+
+		return true;
 	}
 
 }
