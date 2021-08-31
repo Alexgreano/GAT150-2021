@@ -21,6 +21,11 @@ void nc::RBPhysicsComponent::ApplyForce(const Vector2& force)
 	}
 }
 
+nc::RBPhysicsComponent::~RBPhysicsComponent()
+{
+    owner->scene->engine->Get<PhysicsSystem>()->DestroyBody(body);
+}
+
 bool nc::RBPhysicsComponent::Write(const rapidjson::Value& value) const
 {
 	return false;

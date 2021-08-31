@@ -5,6 +5,22 @@
 #include <algorithm>
 
 namespace nc {
+	Actor::Actor(const Actor& other)
+	{
+		tag = other.tag;
+		name = other.name;
+		transform = other.transform;
+		scene = other.scene;
+
+		for (auto& component : other.components)
+		{
+			auto clone = std::unique_ptr<Component>(dynamic_cast<Component*>(component->Clone().release()));
+			clone->owner = this;
+			clone->Create();
+			AddComponent(std::move(clone));
+		}
+	}
+
 	void nc::Actor::Update(float dt)
 	{
 		std::for_each(components.begin(), components.end(), [](auto& component) {component->Update(); });
@@ -25,15 +41,33 @@ namespace nc {
 		std::for_each(children.begin(), children.end(), [renderer](auto& child) { child->Draw(renderer); });
 	}
 
+	void Actor::BeginContact(Actor* other)
+	{
+		Event event;
+		event.name = "collision_enter";
+		event.data = other;
+		event.receiver = this;
+
+		scene->engine->Get<EventSystem>()->Notify(event);
+
+		std::cout << "im here" << std::endl;
+
+	}
+
+	void Actor::EndContact(Actor* other)
+	{
+		Event event;
+		event.name = "collision_exit";
+		event.data = other;
+		event.receiver = this;
+
+		scene->engine->Get<EventSystem>()->Notify(event);
+	}
+
 	void Actor::AddChild(std::unique_ptr<Actor> actor)
 	{
 		actor->parent = this;
 		children.push_back(std::move(actor));
-	}
-
-	float Actor::GetRadius()
-	{
-		return 0;
 	}
 
 	void Actor::AddComponent(std::unique_ptr<Component> component)
@@ -64,7 +98,7 @@ namespace nc {
 				if (component) {
 					component->owner = this;
 					component->Read(componentValue);
-
+					component->Create();
 					AddComponent(std::move(component));
 
 				}

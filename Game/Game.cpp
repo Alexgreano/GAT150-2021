@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "GameComponent/PlayerComponent.h"
 #include "GameComponent/EnemyComponent.h"
+#include "GameComponent/PickUpComponent.h"
 
 //int global = 10;
 
@@ -15,6 +16,7 @@ void Game::Initialize()
 	//register classes
 	REGISTER_CLASS(PlayerComponent);
 	REGISTER_CLASS(EnemyComponent);
+	REGISTER_CLASS(PickUpComponent);
 
 	//create scene
 	scene = std::make_unique<nc::Scene>();
@@ -28,17 +30,13 @@ void Game::Initialize()
 	assert(success);
 
 	scene->Read(document);
-	
-	////actors
-	//std::unique_ptr<nc::Actor> actor = std::make_unique <nc::Actor>(nc::Transform{ nc::Vector2{400, 300}, 0, 1 });
-	//{
-	//	auto component = nc::ObjectFactory::Instance().Create<nc::SpriteCompnent>("SpriteCompnent");
-	//	component->texture = engine->Get<nc::ResourceSystem>()->Get<nc::Texture>("sparkle.png", engine->Get<nc::Renderer>());
-	//	actor->AddComponent(std::move(component));
-	//	//nc::SpriteAnimationComponent* component = actor->AddComponent<nc::SpriteCompnent>();
 
-	//}
-	//scene->AddActor(std::move(actor));
+	for (int i = 0; i < 10; i++) {
+		auto actor = nc::ObjectFactory::Instance().Create<nc::Actor>("Coin");
+		actor->transform.position = nc::Vector2{ nc::RandomRange(0,800), nc::RandomRange(300, 450) };
+		scene->AddActor(std::move(actor));
+	}
+
 }
 
 void Game::Shutdown()

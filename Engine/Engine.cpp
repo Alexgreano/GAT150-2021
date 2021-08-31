@@ -18,6 +18,8 @@ namespace nc {
 		REGISTER_CLASS(SpriteAnimationComponent)
 		REGISTER_CLASS(PhysicsComponent)
 		REGISTER_CLASS(RBPhysicsComponent)
+		REGISTER_CLASS(AudioComponent)
+		REGISTER_CLASS(TextComponent)
 	}
 	void Engine::Shutdown() {
 		std::for_each(systems.begin(), systems.end(), [](auto& system) {system->Shutdown(); });

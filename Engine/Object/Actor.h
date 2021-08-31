@@ -3,6 +3,7 @@
 #include "Math/Transform.h"
 #include "Component/Component.h"
 #include "Core/Serializable.h"
+#include "Framework/EventSystem.h"
 #include <vector>
 #include <memory>
 
@@ -13,17 +14,21 @@ namespace nc {
 	class Actor : public Object, public ISerializable {
 	public:
 		Actor() {}
-		Actor(const Transform transform) : transform{ transform }{};
+		Actor(const Transform transform) : transform{ transform }{}
+		Actor(const Actor& other);
+
+		std::unique_ptr<Object> Clone() const { return std::make_unique<Actor>(*this); }
+
 
 		virtual void Initialize() {}
 
 		virtual void Update(float dt);
 		virtual void Draw(Renderer* renderer);
 
-		virtual void OnCollision(Actor* actor) {};
-		void AddChild(std::unique_ptr<Actor> actor);
+		void BeginContact(Actor* other);
+		void EndContact(Actor* other);
 
-		float GetRadius();
+		void AddChild(std::unique_ptr<Actor> actor);
 
 		void AddComponent(std::unique_ptr<Component> component);
 		template<class T>
