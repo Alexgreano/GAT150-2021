@@ -38,6 +38,7 @@
 //objects
 #include "Object/Actor.h"
 #include "Object/Scene.h"
+#include "Object/TileMap.h"
 
 #include <vector>
 #include <memory>

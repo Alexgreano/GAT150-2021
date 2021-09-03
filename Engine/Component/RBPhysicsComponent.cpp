@@ -6,7 +6,7 @@ void nc::RBPhysicsComponent::Update()
     if (!body) {
         body = owner->scene->engine->Get<PhysicsSystem>()->CreateBody(owner->transform.position, owner->transform.rotation, data, owner);
         body->SetGravityScale(data.gravityScale);
-        body->SetLinearDamping(1);
+        body->SetLinearDamping(damping);
     }
 
     owner->transform.position = PhysicsSystem::WorldToScreen(body->GetPosition());
@@ -19,6 +19,12 @@ void nc::RBPhysicsComponent::ApplyForce(const Vector2& force)
 	if (body) {
 		body->ApplyForceToCenter(force, true);
 	}
+}
+
+nc::RBPhysicsComponent::RBPhysicsComponent(const RBPhysicsComponent& other)
+{
+    data = other.data;
+    damping = other.damping;
 }
 
 nc::RBPhysicsComponent::~RBPhysicsComponent()
@@ -41,6 +47,8 @@ bool nc::RBPhysicsComponent::Read(const rapidjson::Value& value)
     JSON_READ(value, data.friction);
     JSON_READ(value, data.restitution);
     JSON_READ(value, data.gravityScale);
+
+    JSON_READ(value, damping);
 
 	return true;
 }

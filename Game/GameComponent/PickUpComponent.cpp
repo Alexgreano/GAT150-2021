@@ -13,6 +13,7 @@ void PickUpComponent::Create()
 	owner->scene->engine->Get<EventSystem>()->Subscribe("collision_exit", std::bind(&PickUpComponent::OnCollisionExit, this, std::placeholders::_1), owner);
 
 	owner->scene->engine->Get<AudioSystem>()->AddAudio("coin", "audio/coin.wav");
+	owner->scene->engine->Get<AudioSystem>()->AddAudio("lava", "audio/lava.wav");
 }
 
 void PickUpComponent::Update()
@@ -33,6 +34,16 @@ void PickUpComponent::OnCollisionEnter(const nc::Event& event)
 
 	if (istring_compare(actor->tag, "Player")) {
 		owner->scene->engine->Get<AudioSystem>()->PlayAudio("coin");
+		owner->destroy = true;
+
+		Event event;
+		event.name = "add_score";
+		event.data = 10;
+
+		owner->scene->engine->Get<EventSystem>()->Notify(event);
+	}
+	if (istring_compare(actor->tag, "lava")) {
+		owner->scene->engine->Get<AudioSystem>()->PlayAudio("lava");
 		owner->destroy = true;
 	}
 

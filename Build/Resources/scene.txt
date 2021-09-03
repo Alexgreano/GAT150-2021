@@ -4,10 +4,11 @@
          "type":"Actor",
          "name":"Player",
          "tag":"Player",
+         "prototype":true,
          "transform":{
             "position":[
-               400,
-               300
+               100,
+               600
             ],
             "scale":[
                2,
@@ -18,7 +19,8 @@
          "components":[
             {
                "type":"PlayerComponent",
-               "speed":50
+               "speed":50,
+               "jumpAmount":1000
             },
             {
                "type":"SpriteAnimationComponent",
@@ -34,6 +36,18 @@
                      "sequence.fps":3,
                      "sequence.startFrame":0,
                      "sequence.endFrame":1
+                  },
+                  {
+                     "name":"hurt",
+                     "sequence.fps":3,
+                     "sequence.startFrame":174,
+                     "sequence.endFrame":176
+                  },
+                  {
+                     "name":"dead",
+                     "sequence.fps":3,
+                     "sequence.startFrame":40,
+                     "sequence.endFrame":40
                   },
                   {
                      "name":"walk_right",
@@ -55,11 +69,11 @@
                "data.isDynamic":true,
                "data.density":3,
                "data.lockAngle":true,
-               "data.restitution":0.1,
-               "data.gravityScale":1,
+               "data.restitution":0.2,
+               "data.gravityScale":2,
                "data.size":[
-                  32,
-                  32
+                  24,
+                  48
                ]
             },
             {
@@ -71,30 +85,9 @@
       },
       {
          "type":"Actor",
-         "name":"Score",
-         "transform":{
-            "position":[
-               60,
-               20
-            ]
-         },
-         "components":[
-            {
-               "type":"TextComponent",
-               "fontName":"fonts/VTKSDURA3d.ttf",
-               "fontSize":16,
-               "color":[
-                  1,
-                  1,
-                  1
-               ],
-               "text":"Hello World!"
-            }
-         ]
-      },
-      {
-         "type":"Actor",
+         "name":"Enemy",
          "tag":"Enemy",
+         "prototype":true,
          "transform":{
             "position":[
                200,
@@ -154,7 +147,46 @@
                "numFramesX":8,
                "numFramesY":1,
                "startFrame":1,
-               "endFrame":8
+               "endFrame":7
+            },
+            {
+               "type":"RBPhysicsComponent",
+               "data.isDynamic":true,
+               "data.density":3,
+               "data.isSensor":false,
+               "data.lockAngle":false,
+               "data.restitution":0.8,
+               "data.gravityScale":1,
+               "data.size":[
+                  32,
+                  32
+               ]
+            },
+            {
+               "type":"PickUpComponent"
+            }
+         ]
+      },
+      {
+         "type":"Actor",
+         "name":"life",
+         "prototype":true,
+         "tag":"life",
+         "transform":{
+            "position":[
+               600,
+               700
+            ]
+         },
+         "components":[
+            {
+               "type":"SpriteAnimationComponent",
+               "textureName":"heart.png",
+               "fps":10,
+               "numFramesX":8,
+               "numFramesY":1,
+               "startFrame":1,
+               "endFrame":7
             },
             {
                "type":"RBPhysicsComponent",
@@ -163,39 +195,240 @@
                "data.isSensor":false,
                "data.lockAngle":true,
                "data.restitution":0.1,
-               "data.gravityScale":0,
+               "data.gravityScale":1,
                "data.size":[
                   32,
                   32
                ]
             },
             {
-                "type":"PickUpComponent"
+               "type":"ExtraLifeComponent"
             }
          ]
       },
       {
          "type":"Actor",
+         "name":"tile01",
          "tag":"Ground",
+         "prototype":true,
          "transform":{
-            "position":[
-               400,
-               550
+            "scale":[
+               2,
+               2
             ]
          },
          "components":[
             {
                "type":"SpriteComponent",
-               "textureName":"ground.png"
+               "textureName":"tileset2_32x32.png",
+               "rect":[
+                  416,
+                  128,
+                  32,
+                  32
+               ]
             },
             {
                "type":"RBPhysicsComponent",
                "data.isDynamic":false,
                "data.density":1,
                "data.size":[
-                  866,
-                  20
+                  64,
+                  64
                ]
+            }
+         ]
+      },
+      {
+         "type":"Actor",
+         "name":"lava",
+         "tag":"lava",
+         "prototype":true,
+         "transform":{
+            "scale":[
+               2,
+               2
+            ]
+         },
+         "components":[
+            {
+               "type":"SpriteComponent",
+               "textureName":"tileset2_32x32.png",
+               "rect":[
+                  192,
+                  384,
+                  32,
+                  32
+               ]
+            },
+            {
+               "type":"RBPhysicsComponent",
+               "data.isDynamic":false,
+               "data.density":1,
+               "data.size":[
+                  64,
+                  32
+               ]
+            }
+         ]
+      },
+      {
+         "type":"Actor",
+         "name":"ice",
+         "tag":"Ground",
+         "prototype":true,
+         "transform":{
+            "scale":[
+               2,
+               2
+            ]
+         },
+         "components":[
+            {
+               "type":"SpriteComponent",
+               "textureName":"tileset2_32x32.png",
+               "rect":[
+                  32,
+                  64,
+                  32,
+                  32
+               ]
+            },
+            {
+               "type":"RBPhysicsComponent",
+               "data.isDynamic":false,
+               "data.density":1,
+               "data.friction":0.0009,
+               "data.size":[
+                  64,
+                  64
+               ]
+            }
+         ]
+      },
+      {
+         "type":"Actor",
+         "name":"wall",
+         "tag":"Ground",
+         "prototype":true,
+         "transform":{
+            "scale":[
+               2,
+               2
+            ]
+         },
+         "components":[
+            {
+               "type":"SpriteComponent",
+               "textureName":"tileset2_32x32.png",
+               "rect":[
+                  512,
+                  352,
+                  32,
+                  32
+               ]
+            },
+            {
+               "type":"RBPhysicsComponent",
+               "data.isDynamic":false,
+               "data.density":1,
+               "friction":1,
+               "data.size":[
+                  64,
+                  64
+               ]
+            }
+         ]
+      },
+      {
+         "type":"Actor",
+         "name":"bounce",
+         "tag":"Ground",
+         "prototype":true,
+         "transform":{
+            "scale":[
+               2,
+               2
+            ]
+         },
+         "components":[
+            {
+               "type":"SpriteComponent",
+               "textureName":"tileset2_32x32.png",
+               "rect":[
+                  448,
+                  192,
+                  32,
+                  32
+               ]
+            },
+            {
+               "type":"RBPhysicsComponent",
+               "data.isDynamic":false,
+               "data.density":1,
+               "friction":1,
+               "data.restitution":1,
+               "data.isSensor":false,
+               "data.size":[
+                  64,
+                  64
+               ]
+            }
+         ]
+      },
+      {
+         "type":"Actor",
+         "name":"Target",
+         "prototype":false,
+         "tag":"target",
+         "transform":{
+            "position":[
+               600,
+               700
+            ]
+         },
+         "components":[
+            {
+               "type":"SpriteComponent",
+               "textureName":"target.png"
+            },
+            {
+               "type":"TargetComponent"
+            }
+         ]
+      },
+      {
+         "type":"Actor",
+         "name":"Projectile",
+         "prototype":true,
+         "tag":"projectile",
+         "transform":{
+            "position":[
+               600,
+               700
+            ]
+         },
+         "components":[
+            {
+               "type":"SpriteComponent",
+               "textureName":"projectile.png"
+            },
+            {
+               "type":"RBPhysicsComponent",
+               "data.isDynamic":true,
+               "data.density":0.1,
+               "data.isSensor":true,
+               "data.lockAngle":true,
+               "data.restitution":0.1,
+               "data.gravityScale":0,
+               "data.size":[
+                  32,
+                  32
+               ],
+               "damping": 0
+            },
+            {
+               "type":"ProjectileComponent"
             }
          ]
       }

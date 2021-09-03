@@ -23,6 +23,8 @@ namespace nc {
 
 	void nc::Actor::Update(float dt)
 	{
+		if (!active) return;
+
 		std::for_each(components.begin(), components.end(), [](auto& component) {component->Update(); });
 
 		transform.Update();
@@ -31,6 +33,9 @@ namespace nc {
 
 	void nc::Actor::Draw(Renderer* renderer)
 	{
+		if (!active) return;
+
+
 		//renderer->Draw(texture, transform);
 		std::for_each(components.begin(), components.end(), [renderer](auto& component) {
 			if (dynamic_cast<GraphicsComponent*>(component.get())) {
@@ -49,8 +54,6 @@ namespace nc {
 		event.receiver = this;
 
 		scene->engine->Get<EventSystem>()->Notify(event);
-
-		std::cout << "im here" << std::endl;
 
 	}
 

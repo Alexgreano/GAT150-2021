@@ -5,6 +5,8 @@
 namespace nc {
 	class RBPhysicsComponent : public PhysicsComponent {
 	public:
+		RBPhysicsComponent() = default;
+		RBPhysicsComponent(const RBPhysicsComponent& other);
 		std::unique_ptr<Object> Clone() const { return std::make_unique<RBPhysicsComponent>(*this); }
 		~RBPhysicsComponent();
 
@@ -16,6 +18,7 @@ namespace nc {
 
 	public:
 		PhysicsSystem::RigidBodyData data;
+		float damping{ 1 };
 		b2Body* body{nullptr};
 	};
 }

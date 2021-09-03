@@ -1,6 +1,8 @@
 #pragma once
 #include "Component/Component.h"
 #include "Framework/EventSystem.h"
+#include "Component/SpriteAnimationComponent.h"
+#include "Game.h"
 //#include "Object/Actor.h"
 
 class PlayerComponent : public nc::Component {
@@ -19,6 +21,11 @@ public:
 	
 public:
 	float speed { 0 };
+	bool jump{ false };
+	float jumpAmount = 0;
+	float immunityTimer = 0;
+	nc::Vector2 force = {0};
+	nc::SpriteAnimationComponent* spriteAnimationComponent{ nullptr };
 
 private:
 	std::list<nc::Actor*> contacts;
